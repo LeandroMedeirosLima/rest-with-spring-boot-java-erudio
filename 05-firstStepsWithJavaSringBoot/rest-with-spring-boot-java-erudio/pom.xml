@@ -19,6 +19,7 @@
 		<springdoc.version>2.1.0</springdoc.version>
 	</properties>
 	<dependencies>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -89,6 +90,7 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+		
 	</dependencies>
 
 	<build>
