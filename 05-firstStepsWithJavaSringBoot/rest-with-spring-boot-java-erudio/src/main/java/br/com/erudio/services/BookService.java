@@ -55,13 +55,21 @@ public class BookService {
         return new ArrayList<BookVO>();
     }
     
-    public BookVO create(BookVO bookVo) {
-        if (bookVo == null) { throw new RequiredObjectIsNullException(); }  
+    public BookVO create(BookVO book) {
+//        if (bookVo == null) { throw new RequiredObjectIsNullException(); }  
+//        
+//        logger.info("Creating book");
+//        var book = DozerMapper.parseObject(bookVo, Book.class); 
+//        var vo = DozerMapper.parseObject(repository.save(book), BookVO.class);
+//        
+//        vo.add(linkTo(methodOn(BookController.class).findById(vo.getKey())).withSelfRel());
+//        return vo;
         
-        logger.info("Creating book");
-        var book = DozerMapper.parseObject(bookVo, Book.class); 
-        var vo = DozerMapper.parseObject(repository.save(book), BookVO.class);
+        if (book == null) throw new RequiredObjectIsNullException();
         
+        logger.info("Creating one book!");
+        var entity = DozerMapper.parseObject(book, Book.class);
+        var vo =  DozerMapper.parseObject(repository.save(entity), BookVO.class);
         vo.add(linkTo(methodOn(BookController.class).findById(vo.getKey())).withSelfRel());
         return vo;
     }
