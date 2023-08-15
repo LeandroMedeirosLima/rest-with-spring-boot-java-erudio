@@ -3,16 +3,28 @@ package br.com.erudio.integrationtests.vo;
 import java.io.Serializable;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dozermapper.core.Mapping;
+
 public class PersonVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Mapping("id")
+    @JsonProperty("id")
     private Long id;
+    
+    @JsonProperty("first_name")
     private String firstName;
+    
+    @JsonProperty("last_name")
     private String lastName;
+    
     private String address;
+    
     private String gender;
 
+    
     public Long getId() {
         return id;
     }
