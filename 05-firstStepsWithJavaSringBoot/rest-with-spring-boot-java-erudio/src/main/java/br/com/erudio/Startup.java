@@ -16,13 +16,13 @@ public class Startup {
 		SpringApplication.run(Startup.class, args);
 		
 		
-//        Map<String, PasswordEncoder> encoders = new HashMap<>();
-//        encoders.put("pbkdf2", new Pbkdf2PasswordEncoder());
-//        DelegatingPasswordEncoder passwordEncoder = new DelegatingPasswordEncoder("pbkdf2", encoders);
-//        passwordEncoder.setDefaultPasswordEncoderForMatches(new Pbkdf2PasswordEncoder());
-//        
-//        String result = passwordEncoder.encode("admin234");
-//        System.out.println("My hash " + result);
+        Map<String, PasswordEncoder> encoders = new HashMap<>();
+        encoders.put("pbkdf2", Pbkdf2PasswordEncoder.defaultsForSpringSecurity_v5_8());
+        DelegatingPasswordEncoder passwordEncoder = new DelegatingPasswordEncoder("pbkdf2", encoders);
+        passwordEncoder.setDefaultPasswordEncoderForMatches(Pbkdf2PasswordEncoder.defaultsForSpringSecurity_v5_8());
+        
+        String result = passwordEncoder.encode("admin234");
+        System.out.println("My hash " + result);
         
 	}
 	

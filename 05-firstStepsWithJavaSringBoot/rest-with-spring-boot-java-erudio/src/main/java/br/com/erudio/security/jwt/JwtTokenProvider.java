@@ -37,12 +37,6 @@ public class JwtTokenProvider {
     
     Algorithm algorithm = null;
     
-    @PostConstruct
-    protected void init() {
-        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
-        algorithm = Algorithm.HMAC256(secretKey.getBytes());
-    }
-    
     public TokenVO createAccessToken(String userName, List<String> roles) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
@@ -51,6 +45,14 @@ public class JwtTokenProvider {
         String refreshToken = getRefreshToken(userName, roles, now, validity);
         
         return new TokenVO(userName, true, now, validity, accessToken, refreshToken);
+    }
+    
+    private DecodedJWT decodedToken(String token) {
+        Algorithm alg = Algorithm.HMAC256(secretKey.getBytes());
+        JWTVerifier verifier = JWT.require(alg).build();
+        DecodedJWT decoedJWT = verifier.verify(token);
+                
+        return decoedJWT;
     }
 
     private String getAccessToken(String userName, List<String> roles, Date now, Date validity) {
@@ -66,6 +68,13 @@ public class JwtTokenProvider {
                 .strip();
     }
     
+    public Authentication getAuthentication(String token) {
+        DecodedJWT decodedJWT = decodedToken(token);
+        UserDetails userDetails = this.userDetailsService.loadUserByUsername(decodedJWT.getSubject());
+        
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    }
+    
     private String getRefreshToken(String userName, List<String> roles, Date now, Date validity) {
         Date validityRefreshToken = new Date(now.getTime() + (validityInMilliseconds * 3)); //3h
         return JWT.create()
@@ -76,20 +85,11 @@ public class JwtTokenProvider {
                 .sign(algorithm)
                 .strip();
     }
-    
-    public Authentication getAuthentication(String token) {
-        DecodedJWT decodedJWT = decodedToken(token);
-        UserDetails userDetails = this.userDetailsService.loadUserByUsername(decodedJWT.getSubject());
-        
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
-    }
 
-    private DecodedJWT decodedToken(String token) {
-        Algorithm alg = Algorithm.HMAC256(secretKey.getBytes());
-        JWTVerifier verifier = JWT.require(alg).build();
-        DecodedJWT decoedJWT = verifier.verify(token);
-                
-        return decoedJWT;
+    @PostConstruct
+    protected void init() {
+        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+        algorithm = Algorithm.HMAC256(secretKey.getBytes());
     }
     
     public String resolveToken(HttpServletRequest request) { 
@@ -102,6 +102,21 @@ public class JwtTokenProvider {
         } 
         
         return token;
+    }
+    
+    public TokenVO refreshToken(String refreshToken) {
+        
+        if (refreshToken.contains("Bearer ")) {
+            refreshToken = refreshToken.substring("Bearer ".length());
+        }
+        
+        JWTVerifier verifier = JWT.require(algorithm).build();
+        DecodedJWT decoedJWT = verifier.verify(refreshToken);
+        
+        String username = decoedJWT.getSubject();
+        List<String> roles =  decoedJWT.getClaim("roles").asList(String.class);
+        
+        return createAccessToken(username, roles);
     }
     
     public boolean validateToken(String token) {

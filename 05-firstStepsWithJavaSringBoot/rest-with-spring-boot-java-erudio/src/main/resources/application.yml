@@ -1,5 +1,5 @@
 cors:
-  originPatterns: http://localhost:8080,https://erudio.com.br
+  originPatterns: http://localhost:3000,http://localhost:8080,https://erudio.com.br
 security:
   jwt:
     token:
@@ -19,6 +19,8 @@ spring:
      dialect: org.hibernate.dialect.MySQL8Dialect
    show-sql: true
 springdoc:
-  pathsToMatch: /api/**/v1/**
+  pathsToMatch: 
+    - /auth/**
+    - /api/**/v1/**
   swagger-ui:
     use-root-path: true
