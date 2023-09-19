@@ -133,7 +133,7 @@ public class PersonController {
             @RequestParam(value = "page", defaultValue = "0") Integer page, 
             @RequestParam(value = "size", defaultValue = "12") Integer size,
             @RequestParam(value = "direction", defaultValue = "asc") String direction) {
-        //Novo teste de GIT. Comentários de teste
+        //Teste de Merge
         var sortDirection = "desc".equalsIgnoreCase(direction) ? Direction.DESC : Direction.ASC;
         
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "firstName"));
