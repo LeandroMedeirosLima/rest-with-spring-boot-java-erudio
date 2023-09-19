@@ -27,7 +27,7 @@ public class SecurityConfig {
 
     @Autowired
     private JwtTokenProvider tokenProvider;
-
+    
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         

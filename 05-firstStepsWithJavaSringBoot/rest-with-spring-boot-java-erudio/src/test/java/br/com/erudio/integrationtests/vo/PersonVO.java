@@ -13,18 +13,31 @@ public class PersonVO implements Serializable {
     @Mapping("id")
     @JsonProperty("id")
     private Long id;
-    
+
     @JsonProperty("first_name")
     private String firstName;
-    
+
     @JsonProperty("last_name")
     private String lastName;
-    
+
     private String address;
-    
+
     private String gender;
 
-    
+    private Boolean enabled;
+
+    public PersonVO() {
+
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
     public Long getId() {
         return id;
     }

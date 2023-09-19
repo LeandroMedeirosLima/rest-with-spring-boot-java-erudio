@@ -33,7 +33,7 @@ public class AuthService {
             var username = data.getUsername();
             var password = data.getPassword();
             
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            //authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
             
             var user = repository.findByUsername(username);
             var tokenResponse = new TokenVO();
